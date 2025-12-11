@@ -4,6 +4,7 @@ import { printMetrics, registerMetrics } from "@/lib/metrics";
 import { clientInfo, requestLogger } from "@/middleware/request-logger";
 import { sentryMiddleware } from "@/middleware/sentry";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { Scalar } from "@scalar/hono-api-reference";
 import { authentication } from "@/routes/auth";
 import { rateLimit } from "@/lib/rate-limit";
 import { health } from "@/routes/health";
@@ -80,6 +81,16 @@ app.doc("/docs", {
     },
   ],
 });
+
+app.get(
+  "/docs/ui",
+  Scalar({
+    theme: "alternate",
+    pageTitle: `${env.APP_NAME} API`,
+    layout: "modern",
+    url: "/docs",
+  })
+);
 
 app.get("/api/v1", (c) => {
   return c.text("Hello Hono!");

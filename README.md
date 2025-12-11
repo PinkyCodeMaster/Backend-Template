@@ -71,6 +71,7 @@ See `.env.example` for defaults. Key variables:
 - `/api/v1/metrics` - Prometheus metrics
 - `/api/v1/auth/*` - Better Auth handler (REST + OpenAPI)
 - `/docs` - OpenAPI JSON + docs UI
+- `/docs/ui` - Scalar-powered API reference UI (OpenAPI from `/docs`)
 
 ## Architecture Notes
 - **App lifecycle**: graceful signal handling + unhandled error capture to Sentry (prod)
