@@ -32,5 +32,8 @@ jobs:
       - name: Contract sanity check
         run: bun run contracts:test
 
+      - name: Auth contract check
+        run: bun run test:auth-contract
+
       - name: Smoke tests
         run: bun run test:smoke

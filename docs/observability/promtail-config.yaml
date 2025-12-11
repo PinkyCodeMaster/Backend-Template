@@ -6,7 +6,7 @@ positions:
   filename: /tmp/positions.yaml
 
 clients:
-  - url: http://localhost:3100/loki/api/v1/push
+  - url: https://loki.yourdomain.com/loki/api/v1/push
 
 scrape_configs:
   - job_name: foundry-api-logs
@@ -15,5 +15,5 @@ scrape_configs:
         labels:
           job: foundry-api
           service: foundry-api
-          host: localhost
-          __path__: /var/log/foundry-api.log
+          host: api.yourdomain.com
+          __path__: /var/log/foundry-api.log # set to your API log path or mount point

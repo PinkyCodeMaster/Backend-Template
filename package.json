@@ -13,6 +13,7 @@
     "openapi:client": "openapi-typescript docs/openapi.json -o clients/openapi.ts",
     "contracts:build": "bun run openapi:emit && bun run openapi:client",
     "contracts:test": "tsx scripts/validate-openapi.ts",
+    "test:auth-contract": "tsx scripts/auth-contract.ts",
     "test:smoke": "tsx scripts/smoke.ts",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push"

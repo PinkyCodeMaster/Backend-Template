@@ -48,7 +48,9 @@ The server will pick a LAN IP for `BASE_URL` in dev; visit `/api/v1/health` and 
 - `bun run openapi:client` - generate typed client at `clients/openapi.ts`
 - `bun run contracts:build` - emit OpenAPI + client
 - `bun run contracts:test` - sanity-check the emitted OpenAPI JSON
+- `bun run test:auth-contract` - minimal auth/OpenAPI contract check
 - `bun run test:smoke` - in-process smoke checks for health/docs
+- `k6 run k6/smoke.js` - lightweight load/smoke from the outside (set `BASE_URL`)
 
 ## Environment
 See `.env.example` for defaults. Key variables:
@@ -111,6 +113,7 @@ Extend with deploy, migrations, and smoke tests as you wire up your platform.
 - Generate and ship OpenAPI (`bun run contracts:build`) and distribute `clients/openapi.ts` to consumers
 - Validate crash reporting with `/api/v1/crash`; verify Prometheus scrape and log shipping
 - Tighten CORS origins per environment and rotate credentials regularly
+- Run external smoke/load: `k6 run k6/smoke.js -e BASE_URL=https://api.yourdomain.com -e VUS=10 -e DURATION=2m`
 
 ## Reverse Proxy
 - See `deploy/nginx.conf` for an example Nginx config (HTTP→HTTPS redirect, gzip, proxy headers). Replace certificate paths and back-end host/port as needed.

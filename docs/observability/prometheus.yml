@@ -7,6 +7,6 @@ scrape_configs:
     static_configs:
       - targets:
           # Update host/port for your deployment
-          - localhost:9000
+          - api.yourdomain.com:443
         labels:
           service: foundry-api
