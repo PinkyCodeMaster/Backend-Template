@@ -80,6 +80,7 @@ See `.env.example` for defaults. Key variables:
 - **Storage**: MinIO/S3 helper for presigned URLs and uploads
 - **Async**: Inngest client stub for event-based jobs (set `INNGEST_EVENT_KEY` to enable sending)
 - **Contracts**: OpenAPI doc emit + typed client generation via `openapi-typescript`
+- **Domain scaffold**: Example `task` table tied to `user` (`src/db/schema/tasks.ts`) and Inngest task handlers (`src/jobs/tasks.ts`) as placeholders to extend
 
 ## Observability
 - **Sentry**: set `SENTRY_DSN` (plus `SENTRY_ENV` and `SENTRY_RELEASE`) to capture errors; unhandled errors and 500s flush on shutdown.
@@ -114,6 +115,7 @@ Extend with deploy, migrations, and smoke tests as you wire up your platform.
 - Validate crash reporting with `/api/v1/crash`; verify Prometheus scrape and log shipping
 - Tighten CORS origins per environment and rotate credentials regularly
 - Run external smoke/load: `k6 run k6/smoke.js -e BASE_URL=https://api.yourdomain.com -e VUS=10 -e DURATION=2m`
+- Build domain: extend Drizzle schemas/migrations (e.g., `src/db/schema/tasks.ts`), add services/routes, and wire Inngest handlers (`src/jobs/tasks.ts`)
 
 ## Reverse Proxy
 - See `deploy/nginx.conf` for an example Nginx config (HTTP→HTTPS redirect, gzip, proxy headers). Replace certificate paths and back-end host/port as needed.

@@ -13,7 +13,19 @@ function hasMinimumSecrets() {
 }
 
 function checkOpenAPISecurity() {
-  const doc = app.getOpenAPIDocument();
+  const doc = app.getOpenAPIDocument({
+    openapi: "3.0.0",
+    info: {
+      title: `${env.APP_NAME} API`,
+      version: env.APP_VERSION,
+    },
+    servers: [
+      {
+        url: env.BASE_URL,
+        description: env.NODE_ENV,
+      },
+    ],
+  });
   const securitySchemes = doc.components?.securitySchemes ?? {};
   assert(
     "BearerAuth" in securitySchemes,
