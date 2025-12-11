@@ -15,9 +15,10 @@ function getClientIP(req: Request): string {
 
 export function rateLimit(options: RateLimitOptions): MiddlewareHandler {
   const { windowSeconds, maxRequests, keyPrefix = "rl" } = options;
-  const redis = getRedis();
+  let redis: ReturnType<typeof getRedis> | null = null;
 
   return async (c, next) => {
+    redis = redis ?? getRedis();
     const ip = getClientIP(c.req.raw);
     const key = `${keyPrefix}:${ip}`;
     const ttl = windowSeconds;

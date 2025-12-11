@@ -25,3 +25,12 @@ jobs:
 
       - name: Build
         run: bun run build
+
+      - name: Contracts (OpenAPI emit + client)
+        run: bun run contracts:build
+
+      - name: Contract sanity check
+        run: bun run contracts:test
+
+      - name: Smoke tests
+        run: bun run test:smoke

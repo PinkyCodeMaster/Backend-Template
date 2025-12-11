@@ -44,6 +44,11 @@ The server will pick a LAN IP for `BASE_URL` in dev; visit `/api/v1/health` and 
 - `bun start` - run compiled output (`dist`)
 - `bun run db:generate` - drizzle-kit generate
 - `bun run db:push` - drizzle-kit push
+- `bun run openapi:emit` - generate `docs/openapi.json` from the app
+- `bun run openapi:client` - generate typed client at `clients/openapi.ts`
+- `bun run contracts:build` - emit OpenAPI + client
+- `bun run contracts:test` - sanity-check the emitted OpenAPI JSON
+- `bun run test:smoke` - in-process smoke checks for health/docs
 
 ## Environment
 See `.env.example` for defaults. Key variables:
@@ -72,6 +77,7 @@ See `.env.example` for defaults. Key variables:
 - **Email**: React email templates (invite, OTP, verify, reset, welcome) branded via `APP_NAME`
 - **Storage**: MinIO/S3 helper for presigned URLs and uploads
 - **Async**: Inngest client stub for event-based jobs (set `INNGEST_EVENT_KEY` to enable sending)
+- **Contracts**: OpenAPI doc emit + typed client generation via `openapi-typescript`
 
 ## Observability
 - **Sentry**: set `SENTRY_DSN` (plus `SENTRY_ENV` and `SENTRY_RELEASE`) to capture errors; unhandled errors and 500s flush on shutdown.
@@ -102,6 +108,12 @@ Extend with deploy, migrations, and smoke tests as you wire up your platform.
 - Run behind TLS and put a reverse proxy (Caddy/Nginx) in front
 - Configure process manager (systemd/PM2) and health checks on `/api/v1/health`
 - Enable log shipping (Pino JSON) and metrics scraping on `/api/v1/metrics`
+- Generate and ship OpenAPI (`bun run contracts:build`) and distribute `clients/openapi.ts` to consumers
+- Validate crash reporting with `/api/v1/crash`; verify Prometheus scrape and log shipping
+- Tighten CORS origins per environment and rotate credentials regularly
+
+## Reverse Proxy
+- See `deploy/nginx.conf` for an example Nginx config (HTTP→HTTPS redirect, gzip, proxy headers). Replace certificate paths and back-end host/port as needed.
 
 ## Next Steps (for future build-out)
 - Add infra for file storage (e.g., MinIO/S3), background jobs (Inngest), and queueing

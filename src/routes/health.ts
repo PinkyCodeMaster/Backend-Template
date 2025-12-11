@@ -12,6 +12,7 @@ const HealthResponseSchema = z.object({
 
 const healthRoute = createRoute({
   method: "get",
+  title: "Health",
   path: "/",
   responses: {
     200: {

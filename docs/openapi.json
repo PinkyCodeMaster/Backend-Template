@@ -1,0 +1,66 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Foundry API API",
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "http://192.168.0.24:9000",
+      "description": "development"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {},
+    "parameters": {}
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "title": "Health",
+        "responses": {
+          "200": {
+            "description": "Health check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "service": {
+                      "type": "string",
+                      "example": "api-service"
+                    },
+                    "environment": {
+                      "type": "string",
+                      "example": "development"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "example": "2025-01-01T12:00:00Z"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "service",
+                    "environment",
+                    "timestamp"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

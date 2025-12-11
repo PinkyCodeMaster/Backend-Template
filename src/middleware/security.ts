@@ -47,6 +47,10 @@ export const securityHeaders: MiddlewareHandler = async (c, next) => {
 
   if (env.NODE_ENV === "production") {
     c.res.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+    c.res.headers.set(
+      "Content-Security-Policy",
+      "default-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; img-src 'self' data: https:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src 'self' https:;"
+    );
   }
 
   await next();

@@ -57,8 +57,9 @@ const EnvSchema = z.object({
 });
 
 type RawEnv = z.infer<typeof EnvSchema>;
-export type Env = Omit<RawEnv, "CORS_EXTRA_ORIGINS"> & {
+export type Env = Omit<RawEnv, "CORS_EXTRA_ORIGINS" | "BASE_URL"> & {
   CORS_EXTRA_ORIGINS: string[];
+  BASE_URL: string;
 };
 
 const { data: env, error } = EnvSchema.safeParse(process.env);

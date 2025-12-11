@@ -67,7 +67,7 @@ app.notFound((c) => {
   return c.json({ error: "Route not found" }, 404);
 });
 
-app.doc("/docs", (c) => ({
+app.doc("/docs", {
   openapi: "3.0.0",
   info: {
     title: `${env.APP_NAME} API`,
@@ -75,11 +75,11 @@ app.doc("/docs", (c) => ({
   },
   servers: [
     {
-      url: new URL(c.req.url).origin,
-      description: "Current environment",
+      url: env.BASE_URL,
+      description: env.NODE_ENV,
     },
   ],
-}));
+});
 
 app.get("/api/v1", (c) => {
   return c.text("Hello Hono!");
