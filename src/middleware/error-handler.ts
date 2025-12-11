@@ -8,9 +8,8 @@ export function globalErrorHandler(err: unknown, c: Context) {
 
   if (env.NODE_ENV === "production") {
     Sentry.captureException(err);
-  };
+  }
 
-  // Safe public message
   const message =
     env.NODE_ENV === "production"
       ? "Something went wrong"

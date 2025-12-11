@@ -31,14 +31,12 @@ export function rateLimit(options: RateLimitOptions): MiddlewareHandler {
         .expire(key, ttl)
         .exec();
 
-      // ✅ Type-safe extraction
       const incrResult = result?.[0]?.[1];
 
       count = typeof incrResult === "number"
         ? incrResult
         : Number(incrResult ?? 0);
     } catch (err) {
-      // ✅ FAIL OPEN if Redis dies (never block prod traffic)
       c.get("logger")?.error({ err }, "Rate limit Redis error");
       return next();
     }
@@ -53,7 +51,6 @@ export function rateLimit(options: RateLimitOptions): MiddlewareHandler {
       );
     }
 
-    // ✅ Helpful headers
     c.res.headers.set("X-RateLimit-Limit", maxRequests.toString());
     c.res.headers.set(
       "X-RateLimit-Remaining",

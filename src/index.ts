@@ -1,2 +1,2 @@
 import "@/lib/sentry";
-export * as app from '@/app/server'
+import "@/app/server";

@@ -1,7 +1,5 @@
-import { createRoute, z } from "@hono/zod-openapi";
-import { OpenAPIHono } from "@hono/zod-openapi";
+import { createRoute, z, OpenAPIHono } from "@hono/zod-openapi";
 import env from "@/config/env";
-
 
 const app = new OpenAPIHono();
 
@@ -11,7 +9,6 @@ const HealthResponseSchema = z.object({
   environment: z.string().openapi({ example: "development" }),
   timestamp: z.string().openapi({ example: "2025-01-01T12:00:00Z" }),
 });
-
 
 const healthRoute = createRoute({
   method: "get",
@@ -28,11 +25,10 @@ const healthRoute = createRoute({
   },
 });
 
-
 app.openapi(healthRoute, (c) => {
   return c.json({
     status: "ok",
-    service: env.APP_NAME + "-api",
+    service: `${env.APP_NAME}-api`,
     environment: env.NODE_ENV,
     timestamp: new Date().toISOString(),
   });

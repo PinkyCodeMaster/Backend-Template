@@ -3,7 +3,7 @@ import * as React from "react";
 import { Text, Button } from "@react-email/components";
 import { Layout } from "./Layout";
 
-const APP_NAME = process.env.APP_NAME || "MyApp";
+const APP_NAME = process.env.APP_NAME || "Foundry";
 
 export function VerifyEmail({
   name,
@@ -36,7 +36,7 @@ export function VerifyEmail({
       </Button>
 
       <Text style={{ marginTop: "16px", fontSize: 12 }}>
-        If you didn’t create this account, you can safely ignore this email.
+        If you did not create this account, you can safely ignore this email.
       </Text>
     </Layout>
   );

@@ -1,7 +1,7 @@
 /** @jsxImportSource react */
 import * as React from "react";
 
-const APP_NAME = process.env.APP_NAME || "MyApp";
+const APP_NAME = process.env.APP_NAME || "Foundry";
 
 export function OtpEmail({
   name,
@@ -12,7 +12,7 @@ export function OtpEmail({
 }) {
   return (
     <div style={{ fontFamily: "sans-serif", padding: "24px" }}>
-      <h2>Your {APP_NAME} Verification Code</h2>
+      <h2>Your {APP_NAME} verification code</h2>
 
       {name && <p>Hi {name},</p>}
 
@@ -31,9 +31,9 @@ export function OtpEmail({
 
       <p>This code expires in a few minutes.</p>
 
-      <p>If you didn’t request this, you can safely ignore this email.</p>
+      <p>If you did not request this, you can safely ignore this email.</p>
 
-      <p>— {APP_NAME} Security</p>
+      <p>-- {APP_NAME} Security</p>
     </div>
   );
 }

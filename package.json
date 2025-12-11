@@ -1,8 +1,10 @@
 {
-  "name": "babysteps-server",
+  "name": "foundry-api-starter",
+  "description": "Production-ready Hono + TypeScript API starter with auth, metrics, logging, and CI.",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "lint": "tsc --noEmit",
     "build": "tsc && tsc-alias",
     "start": "node ./dist/src/index.js",
     "db:generate": "drizzle-kit generate",

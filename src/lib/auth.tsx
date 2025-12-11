@@ -10,6 +10,7 @@ import { organization } from "better-auth/plugins";
 
 import { db } from "@/db";
 import { sendEmail } from "@/email/client";
+import env from "@/config/env";
 
 import { VerifyEmail } from "@/email/templates/VerifyEmail";
 import { ResetPasswordEmail } from "@/email/templates/ResetPasswordEmail";
@@ -18,10 +19,9 @@ import { OtpEmail } from "@/email/templates/OtpEmail";
 
 import * as schema from "./auth";
 
-const APP_NAME = process.env.APP_NAME || "MyApp";
-const APP_SCHEME = process.env.APP_SCHEME || "myapp";
-const APP_WEB_URL = process.env.APP_WEB_URL || "http://localhost:3000";
-
+const APP_NAME = env.APP_NAME;
+const APP_SCHEME = env.APP_SCHEME;
+const APP_WEB_URL = env.APP_WEB_URL;
 
 export const auth = betterAuth({
   appName: APP_NAME,
@@ -90,7 +90,7 @@ export const auth = betterAuth({
           subject: `You're invited to join ${data.organization.name} on ${APP_NAME}`,
           react: (
             <InviteEmail
-              invitedBy={data.inviter.user.name ?? "A family member"}
+              invitedBy={data.inviter.user.name ?? "A teammate"}
               organizationName={data.organization.name}
               inviteUrl={inviteUrl}
             />
@@ -102,14 +102,13 @@ export const auth = betterAuth({
     nextCookies(),
   ],
 
-
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
 
     sendVerificationEmail: async ({ user, url }) => {
       const deepLink = url.replace(
-        process.env.BETTER_AUTH_URL!,
+        env.BETTER_AUTH_URL,
         `${APP_SCHEME}://verify`
       );
 
@@ -126,20 +125,17 @@ export const auth = betterAuth({
     },
 
     afterEmailVerification: async (user) => {
-      console.log(`✅ Email verified for: ${user.email}`);
+      console.log(`Email verified for: ${user.email}`);
     },
   },
 
-  /**
-   * ✅ PASSWORD RESET
-   */
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
 
     sendResetPassword: async ({ user, url }) => {
       const deepLink = url.replace(
-        process.env.BETTER_AUTH_URL!,
+        env.BETTER_AUTH_URL,
         `${APP_SCHEME}://reset-password`
       );
 
@@ -156,12 +152,9 @@ export const auth = betterAuth({
     },
   },
 
-  /**
-   * ✅ TRUSTED ORIGINS
-   */
   trustedOrigins: [
     `${APP_SCHEME}://`,
-    ...(process.env.NODE_ENV === "development"
+    ...(env.NODE_ENV === "development"
       ? [
         "exp://*/*",
         "exp://10.0.0.*:*/*",
@@ -172,13 +165,10 @@ export const auth = betterAuth({
       : []),
   ],
 
-  /**
-   * ✅ IP SECURITY
-   */
   advanced: {
     ipAddress: {
       ipAddressHeaders:
-        process.env.NODE_ENV === "production"
+        env.NODE_ENV === "production"
           ? ["cf-connecting-ip"]
           : ["x-forwarded-for"],
     },

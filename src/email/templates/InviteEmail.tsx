@@ -19,8 +19,7 @@ interface InviteEmailProps {
   inviteUrl: string;
 }
 
-// ✅ ENV-DRIVEN BRANDING
-const APP_NAME = process.env.APP_NAME || "MyApp";
+const APP_NAME = process.env.APP_NAME || "Foundry";
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 const LOGO_URL = `${FRONTEND_URL}/assets/logo.png`;
 
@@ -47,7 +46,6 @@ export const InviteEmail = ({
             maxWidth: "520px",
           }}
         >
-          {/* ✅ Logo */}
           <Section style={{ textAlign: "center", marginBottom: 24 }}>
             <Img
               src={LOGO_URL}
@@ -58,7 +56,6 @@ export const InviteEmail = ({
             />
           </Section>
 
-          {/* ✅ Title */}
           <Heading
             style={{
               fontSize: "24px",
@@ -67,10 +64,9 @@ export const InviteEmail = ({
               color: "#111",
             }}
           >
-            You've Been Invited to Join {organizationName}
+            You have been invited to join {organizationName}
           </Heading>
 
-          {/* ✅ Message */}
           <Text
             style={{
               fontSize: "16px",
@@ -80,8 +76,7 @@ export const InviteEmail = ({
               textAlign: "center",
             }}
           >
-            {invitedBy} has invited you to join the{" "}
-            <strong>{organizationName}</strong> group on {APP_NAME}.
+            {invitedBy} invited you to the <strong>{organizationName}</strong> workspace on {APP_NAME}.
           </Text>
 
           <Text
@@ -93,11 +88,9 @@ export const InviteEmail = ({
               marginBottom: "24px",
             }}
           >
-            {APP_NAME} helps families stay connected, track goals, and make
-            progress together.
+            Use the link below to accept and get started.
           </Text>
 
-          {/* ✅ Button */}
           <Section style={{ textAlign: "center", marginBottom: 32 }}>
             <Button
               href={inviteUrl}
@@ -118,7 +111,6 @@ export const InviteEmail = ({
 
           <Hr style={{ margin: "24px 0", borderColor: "#ddd" }} />
 
-          {/* ✅ Footer Text */}
           <Text
             style={{
               fontSize: "12px",
@@ -127,8 +119,7 @@ export const InviteEmail = ({
               lineHeight: "18px",
             }}
           >
-            If you’re on your phone and the {APP_NAME} app is installed, it will
-            open automatically. Otherwise, you can continue in your browser.
+            If you are on your phone and the {APP_NAME} app is installed, it will open automatically.
           </Text>
 
           <Text
@@ -139,7 +130,7 @@ export const InviteEmail = ({
               marginTop: "12px",
             }}
           >
-            © {new Date().getFullYear()} {APP_NAME}. All rights reserved.
+            (c) {new Date().getFullYear()} {APP_NAME}. All rights reserved.
           </Text>
         </Container>
       </Body>
