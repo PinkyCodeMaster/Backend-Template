@@ -30,6 +30,7 @@ const EnvSchema = z.object({
 
   DATABASE_URL: z.string().nonempty(),
   FRONTEND_URL: z.string().url(),
+  CORS_EXTRA_ORIGINS: z.string().optional(), // comma-delimited list
 
   BETTER_AUTH_URL: z.string().url(),
   BETTER_AUTH_SECRET: z.string().min(16),
@@ -42,9 +43,23 @@ const EnvSchema = z.object({
   SENTRY_RELEASE: z.string().default("local"),
 
   REDIS_URL: z.string().nonempty(),
+
+  RATE_LIMIT_GLOBAL_MAX: z.coerce.number().default(60),
+  RATE_LIMIT_AUTH_MAX: z.coerce.number().default(20),
+
+  STORAGE_ENDPOINT: z.string().url().default("http://localhost:9002"),
+  STORAGE_ACCESS_KEY: z.string().default("minioadmin"),
+  STORAGE_SECRET_KEY: z.string().default("minioadmin"),
+  STORAGE_BUCKET: z.string().default("foundry-bucket"),
+  STORAGE_USE_SSL: z.coerce.boolean().default(false),
+
+  INNGEST_EVENT_KEY: z.string().optional(),
 });
 
-export type Env = z.infer<typeof EnvSchema>;
+type RawEnv = z.infer<typeof EnvSchema>;
+export type Env = Omit<RawEnv, "CORS_EXTRA_ORIGINS"> & {
+  CORS_EXTRA_ORIGINS: string[];
+};
 
 const { data: env, error } = EnvSchema.safeParse(process.env);
 
@@ -87,7 +102,14 @@ const baseUrl = env!.BASE_URL ||
     ? "https://api.foundrystack.com"
     : `http://${getLocalIP()}:${env!.PORT}`);
 
-export default {
+const extraOrigins = env!.CORS_EXTRA_ORIGINS
+  ? env!.CORS_EXTRA_ORIGINS.split(",").map(o => o.trim()).filter(Boolean)
+  : [];
+
+const enrichedEnv: Env = {
   ...env!,
   BASE_URL: baseUrl,
+  CORS_EXTRA_ORIGINS: extraOrigins,
 };
+
+export default enrichedEnv;

@@ -1,0 +1,19 @@
+server:
+  http_listen_port: 3101
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://localhost:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: foundry-api-logs
+    static_configs:
+      - targets: [localhost]
+        labels:
+          job: foundry-api
+          service: foundry-api
+          host: localhost
+          __path__: /var/log/foundry-api.log

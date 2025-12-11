@@ -3,6 +3,7 @@ import { app } from "@/app/app";
 import env from "@/config/env";
 import { registerProcessHandlers } from "@/app/lifecycle";
 import { baseLogger } from "@/lib/logger";
+import { Sentry } from "@/lib/sentry";
 
 const port = env.PORT;
 const baseUrl = env.BASE_URL;
@@ -32,6 +33,12 @@ async function shutdown(options?: { exitCode?: number }) {
   try {
     if ("close" in server && typeof server.close === "function") {
       server.close();
+    }
+
+    if (env.SENTRY_DSN) {
+      await Sentry.flush(2000).catch((err) => {
+        baseLogger.warn({ err }, "Failed to flush Sentry");
+      });
     }
 
     baseLogger.info("Shutdown cleanup complete");

@@ -1,0 +1,53 @@
+{
+  "title": "Foundry API - Overview",
+  "uid": "foundry-api",
+  "version": 1,
+  "schemaVersion": 38,
+  "refresh": "30s",
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "HTTP request rate",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROM_DS"
+      },
+      "targets": [
+        {
+          "expr": "sum by (method, status) (rate(http_requests_total{job=\"foundry-api\"}[5m]))",
+          "legendFormat": "{{method}} {{status}}"
+        }
+      ],
+      "options": {
+        "legend": {
+          "showLegend": true
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "HTTP latency p95 (ms)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROM_DS"
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"foundry-api\"}[5m]))) * 1000",
+          "legendFormat": "p95"
+        }
+      ],
+      "options": {
+        "legend": {
+          "showLegend": true
+        }
+      }
+    }
+  ]
+}

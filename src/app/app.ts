@@ -1,7 +1,7 @@
 import { corsMiddleware, securityHeaders } from "@/middleware/security";
 import { globalErrorHandler } from "@/middleware/error-handler";
 import { printMetrics, registerMetrics } from "@/lib/metrics";
-import { requestLogger } from "@/middleware/request-logger";
+import { clientInfo, requestLogger } from "@/middleware/request-logger";
 import { sentryMiddleware } from "@/middleware/sentry";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { authentication } from "@/routes/auth";
@@ -30,12 +30,13 @@ app.openAPIRegistry.registerComponent("securitySchemes", "BearerAuth", {
 
 app.use("*", sentryMiddleware);
 app.use("*", registerMetrics);
+app.use("*", clientInfo);
 app.use(requestLogger());
 app.use(
   "*",
   rateLimit({
-    windowSeconds: 60,   // 1-minute window
-    maxRequests: 60,     // 60 reqs per IP per minute
+    windowSeconds: 60,
+    maxRequests: env.RATE_LIMIT_GLOBAL_MAX,
     keyPrefix: "rl:global",
   })
 );
@@ -91,6 +92,14 @@ app.get("/api/v1/crash", () => {
 });
 
 app.route("/api/v1/health", health);
+app.use(
+  "/api/v1/auth/*",
+  rateLimit({
+    windowSeconds: 60,
+    maxRequests: env.RATE_LIMIT_AUTH_MAX,
+    keyPrefix: "rl:auth",
+  })
+);
 app.route("/api/v1/auth", authentication);
 
 export { app };

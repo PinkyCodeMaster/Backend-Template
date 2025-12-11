@@ -54,6 +54,10 @@ See `.env.example` for defaults. Key variables:
 - `RESEND_API_KEY`, `EMAIL_FROM`
 - `SENTRY_DSN`, `SENTRY_ENV`, `SENTRY_RELEASE`
 - `REDIS_URL`
+- `CORS_EXTRA_ORIGINS`
+- `RATE_LIMIT_GLOBAL_MAX`, `RATE_LIMIT_AUTH_MAX`
+- `STORAGE_ENDPOINT`, `STORAGE_ACCESS_KEY`, `STORAGE_SECRET_KEY`, `STORAGE_BUCKET`, `STORAGE_USE_SSL`
+- `INNGEST_EVENT_KEY`
 
 ## API Surface
 - `/api/v1/health` - health check
@@ -63,10 +67,27 @@ See `.env.example` for defaults. Key variables:
 
 ## Architecture Notes
 - **App lifecycle**: graceful signal handling + unhandled error capture to Sentry (prod)
-- **Middleware**: Sentry context, Prometheus registry, Pino request logger, Redis rate limiter, CORS + security headers, global error handler, 404 handler
+- **Middleware**: Sentry context, Prometheus registry, Pino request logger (with IP/UA + request IDs), Redis rate limiter (global + stricter auth limiter), CORS + security headers, global error handler, 404 handler
 - **Auth**: Better Auth with Drizzle adapter (Postgres), Expo support, bearer signing, admin, orgs, 2FA, email verification/reset flows via Resend
-- **Observability**: structured logging, metrics, optional tracing; crash endpoint `/api/v1/crash` for smoke testing
 - **Email**: React email templates (invite, OTP, verify, reset, welcome) branded via `APP_NAME`
+- **Storage**: MinIO/S3 helper for presigned URLs and uploads
+- **Async**: Inngest client stub for event-based jobs (set `INNGEST_EVENT_KEY` to enable sending)
+
+## Observability
+- **Sentry**: set `SENTRY_DSN` (plus `SENTRY_ENV` and `SENTRY_RELEASE`) to capture errors; unhandled errors and 500s flush on shutdown.
+- **Metrics**: `/api/v1/metrics` Prometheus endpoint; sample scrape config in `docs/observability/prometheus.yml`.
+- **Logs**: Pino JSON in production (stdout). Ship to Loki/ELK/Datadog via an agent; sample Promtail file shipping `/var/log/foundry-api.log` in `docs/observability/promtail-config.yaml`.
+- **Dashboards**: Import `docs/observability/grafana-dashboard.json` and point datasource UID `PROM_DS` at your Prometheus instance.
+- **Crash test**: `/api/v1/crash` throws to validate alerting and error reporting.
+
+## Local Dev Services
+- `docker-compose.yml` spins up Postgres, Redis, and MinIO (S3-compatible).
+- Defaults assume `STORAGE_ENDPOINT=http://localhost:9002`, Postgres on 5432, Redis on 6379.
+- Make sure the API port (9000) does not conflict with MinIO (mapped to 9002).
+
+## Developer Experience
+- `Makefile` shortcuts: `make dev`, `make lint`, `make format`, `make build`, `make compose-up/down`.
+- Pre-commit config (`.pre-commit-config.yaml`) ready for formatting/lint hooks if you use the `pre-commit` tool.
 
 ## CI/CD
 GitHub Actions workflow runs on push/PR:
