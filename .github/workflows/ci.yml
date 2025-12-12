@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: production   # 👈 ensures secrets/vars from that environment are available
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,12 +29,31 @@ jobs:
 
       - name: Contracts (OpenAPI emit + client)
         run: bun run contracts:build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+          FRONTEND_URL: ${{ vars.FRONTEND_URL }}
+          BETTER_AUTH_URL: ${{ vars.BETTER_AUTH_URL }}
+          EMAIL_FROM: ${{ vars.EMAIL_FROM }}
 
       - name: Contract sanity check
         run: bun run contracts:test
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          FRONTEND_URL: ${{ vars.FRONTEND_URL }}
+          BETTER_AUTH_URL: ${{ vars.BETTER_AUTH_URL }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
 
       - name: Auth contract check
         run: bun run test:auth-contract
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
 
       - name: Smoke tests
         run: bun run test:smoke
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          FRONTEND_URL: ${{ vars.FRONTEND_URL }}
