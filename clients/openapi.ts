@@ -37,7 +37,7 @@ export interface paths {
                             service: string;
                             /** @example development */
                             environment: string;
-                            /** @example 2025-12-12T07:14:19.396Z */
+                            /** @example 2025-12-12T07:20:52.944Z */
                             timestamp: string;
                         };
                     };
