@@ -5,14 +5,15 @@ const app = new OpenAPIHono();
 
 const HealthResponseSchema = z.object({
   status: z.string().openapi({ example: "ok" }),
-  service: z.string().openapi({ example: "api-service" }),
-  environment: z.string().openapi({ example: "development" }),
-  timestamp: z.string().openapi({ example: "2025-01-01T12:00:00Z" }),
+  service: z.string().openapi({ example: `${env.APP_NAME}-api` }),
+  environment: z.string().openapi({ example: env.NODE_ENV }),
+  timestamp: z.string().openapi({ example: new Date().toISOString() }),
 });
 
 const healthRoute = createRoute({
   method: "get",
-  title: "Health",
+  summary: "Health check",
+  description: "Service liveness and environment metadata",
   path: "/",
   responses: {
     200: {

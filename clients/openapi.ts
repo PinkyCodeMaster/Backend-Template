@@ -11,7 +11,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Health */
+        /**
+         * Health check
+         * @description Service liveness and environment metadata
+         */
         get: {
             parameters: {
                 query?: never;
@@ -30,11 +33,11 @@ export interface paths {
                         "application/json": {
                             /** @example ok */
                             status: string;
-                            /** @example api-service */
+                            /** @example Foundry API-api */
                             service: string;
                             /** @example development */
                             environment: string;
-                            /** @example 2025-01-01T12:00:00Z */
+                            /** @example 2025-12-12T07:14:19.396Z */
                             timestamp: string;
                         };
                     };
